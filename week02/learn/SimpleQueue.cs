@@ -70,4 +70,4 @@
         _queue.RemoveAt(1);
         return value;
     }
-}
+} 
