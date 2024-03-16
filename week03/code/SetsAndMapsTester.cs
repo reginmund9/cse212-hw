@@ -107,11 +107,23 @@ public static class SetsAndMapsTester {
     /// that there were no duplicates) and therefore should not be displayed.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
+    
+
     private static void DisplayPairs(string[] words) {
-        // To display the pair correctly use something like:
-        // Console.WriteLine($"{word} & {pair}");
-        // Each pair of words should displayed on its own line.
+        var wordSet = new HashSet<string>(words);
+        var pairs = new HashSet<string>();
+        foreach (var word in words) {
+            var reversedWord = new string(word.Reverse().ToArray());
+            if (word.CompareTo(reversedWord) < 0 && wordSet.Contains(reversedWord)) {
+                pairs.Add($"{word} & {reversedWord}");
+            }
+        }
+        foreach (var pair in pairs) {
+            Console.WriteLine(pair);
+        }
+        
     }
+    
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -127,13 +139,19 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 2 #
     /// #############
+    
+
     private static Dictionary<string, int> SummarizeDegrees(string filename) {
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
-            // Todo Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3].Trim();
+            if (degrees.ContainsKey(degree)) {
+                degrees[degree]++;
+            } else {
+                degrees.Add(degree, 1);
+            }
         }
-
         return degrees;
     }
 
@@ -156,9 +174,30 @@ public static class SetsAndMapsTester {
     /// #############
     /// # Problem 3 #
     /// #############
+    
+
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var charCount1 = new Dictionary<char, int>();
+        var charCount2 = new Dictionary<char, int>();
+    
+        foreach (var c in word1.ToLower().Replace(" ", "")) {
+            if (charCount1.ContainsKey(c)) {
+                charCount1[c]++;
+            } else {
+                charCount1.Add(c, 1);
+            }
+        }
+
+        foreach (var c in word2.ToLower().Replace(" ", "")) {
+            if (charCount2.ContainsKey(c)) {
+                charCount2[c]++;
+            } else {
+                charCount2.Add(c, 1);
+            }
+        }
+
+        return charCount1.Count == charCount2.Count &&
+               charCount1.All(pair => charCount2.ContainsKey(pair.Key) && charCount2[pair.Key] == pair.Value);
     }
 
     /// <summary>
@@ -235,5 +274,8 @@ public static class SetsAndMapsTester {
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
-    }
+        foreach (var feature in featureCollection.Features) {
+            Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Magnitude}");
+        }
+    }      
 }
