@@ -5,7 +5,7 @@ public class BinarySearchTree : IEnumerable<int> {
 
     /// <summary>
     /// Insert a new node in the BST.
-    /// </summary>
+    /// </summary> 
     public void Insert(int value) {
         // Create new node
         Node newNode = new Node(value);
@@ -66,6 +66,11 @@ public class BinarySearchTree : IEnumerable<int> {
 
     private void TraverseBackward(Node? node, List<int> values) {
         // TODO Problem 3
+        if (node is not null) {
+        TraverseBackward(node.Right, values); // Traverse right subtree first
+        values.Add(node.Data); // Add current node's data
+        TraverseBackward(node.Left, values); // Traverse left subtree
+        } 
     }
 
     /// <summary>

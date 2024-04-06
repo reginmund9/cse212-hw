@@ -8,6 +8,11 @@ public class Node {
     }
 
     public void Insert(int value) {
+        if (Contains(value)) {
+        // Value already exists in the tree, do not insert duplicates
+        return;
+        }
+    
         if (value < Data) {
             // Insert to the left
             if (Left is null)
@@ -26,11 +31,22 @@ public class Node {
 
     public bool Contains(int value) {
         // TODO Start Problem 2
-        return false;
+        if (Data == value) {
+        return true; // Value found at this node
+        } else if (value < Data && Left != null) {
+            return Left.Contains(value); // Search in the left subtree
+        } else if (value > Data && Right != null) {
+            return Right.Contains(value); // Search in the right subtree
+        } else {
+            return false; // Value not found
+        }
     }
 
     public int GetHeight() {
         // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+       int leftHeight = Left?.GetHeight() ?? 0;
+       int rightHeight = Right?.GetHeight() ?? 0;
+       return 1 + Math.Max(leftHeight, rightHeight);
     }
+    
 }
